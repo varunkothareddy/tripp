@@ -2,161 +2,71 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Travels</title>
-    <link rel="stylesheet" href="test.css">
+    <title>Kumar Travels Form</title>
+    <link rel="stylesheet" href="style.css"> <!-- Linking CSS File -->
 </head>
 <body>
-    <header>
-        <h1>KUMAR TRAVELS</h1>
-    </header>
 
-    <form id="sheetdb" action="https://sheetdb.io/api/v1/z1ir5g6powleo" method="post">
+<form id="sheetdb" action="https://sheetdb.io/api/v1/z1ir5g6powleo" method="post">
     <div class="d1">
         <input type="text" name="data[NAME]" id="uname" placeholder="Enter-Name" required><br>
-
-        <!-- Mobile validation input -->
         <input type="text" name="data[MOBILE]" id="umobile" maxlength="10" placeholder="Mobile-Number" required><br>
-
         <input type="email" name="data[EMAIL]" id="umail" placeholder="Enter-Email" required><br>
         <input type="number" name="data[PERSONS]" id="upersons" placeholder="Num of persons" required><br>
         <input type="date" name="data[DATE]" id="udate" required><br>
-        <div class="button">
-          <div class="text">Submit</div>
-            </div>
-            <div class="progress-bar"></div>
-            <svg x="0px" y="0px" viewBox="0 0 25 30" style="enable-background:new 0 0 25 30;">
-              <path class="check" class="st0" d="M2,19.2C5.9,23.6,9.4,28,9.4,28L23,2" />
-            </svg>
-        </div>
+        <input id="s1" type="submit" value="SUBMIT">
+    </div>
 </form>
 
-<!-- Status message will appear here -->
 <p id="message"></p>
 
+<!-- Loader -->
+<div id="loader" class="loader-overlay">
+    <div class="spinner"></div>
+    <p>Submitting...</p>
+</div>
+
 <script>
-const form = document.getElementById("sheetdb");
+    const form = document.getElementById("sheetdb");
+const loader = document.getElementById("loader");
 const message = document.getElementById("message");
-const submitBtn = document.getElementById("s1");
 
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    let mobile = document.getElementById("umobile").value.trim();
     let name = document.getElementById("uname").value.trim();
+    let mobile = document.getElementById("umobile").value.trim();
 
-    // Clear previous message
-    message.textContent = "";
-    message.style.color = "";
-
-    // Check if mobile is exactly 10 digits and numeric
+    // Validate mobile number
     if (mobile.length !== 10 || !/^[0-9]+$/.test(mobile)) {
         alert("Please enter correct mobile number");
         return;
     }
 
-    // Show loading state
-    submitBtn.disabled = true;
-    const originalBtnText = submitBtn.value;
-    submitBtn.value = "Submitting...";
-    message.textContent = "Submitting your details, please wait...";
-    message.style.color = "blue";
+    // Show loader
+    loader.style.display = "flex";
 
     try {
-        const response = await fetch(form.action, {
+        await fetch(form.action, {
             method: 'POST',
             body: new FormData(form)
         });
 
-        const result = await response.json();
+        loader.style.display = "none";
 
-        // Show success message on page
+        // Success message
         message.textContent = `✔ Success! Thank you, ${name}. Your form has been submitted.`;
         message.style.color = "green";
-
-        // Reset form
+        
         form.reset();
+
     } catch (error) {
-        console.error(error);
-        message.textContent = "Something went wrong. Please try again.";
+        loader.style.display = "none";
+        message.textContent = "❌ Something went wrong. Please try again.";
         message.style.color = "red";
-    } finally {
-        // Remove loading state
-        submitBtn.disabled = false;
-        submitBtn.value = originalBtnText;
     }
 });
-    var basicTimeline = anime.timeline({
-  autoplay: false
-});
 
-var pathEls = $(".check");
-for (var i = 0; i < pathEls.length; i++) {
-  var pathEl = pathEls[i];
-  var offset = anime.setDashoffset(pathEl);
-  pathEl.setAttribute("stroke-dashoffset", offset);
-}
-
-basicTimeline
-  .add({
-    targets: ".text",
-    duration: 1,
-    opacity: "0"
-  })
-  .add({
-    targets: ".button",
-    duration: 1300,
-    height: 10,
-    width: 300,
-    backgroundColor: "#2B2D2F",
-    border: "0",
-    borderRadius: 100
-  })
-  .add({
-    targets: ".progress-bar",
-    duration: 2000,
-    width: 300,
-    easing: "linear"
-  })
-  .add({
-    targets: ".button",
-    width: 0,
-    duration: 1
-  })
-  .add({
-    targets: ".progress-bar",
-    width: 80,
-    height: 80,
-    delay: 500,
-    duration: 750,
-    borderRadius: 80,
-    backgroundColor: "#71DFBE"
-  })
-  .add({
-    targets: pathEl,
-    strokeDashoffset: [offset, 0],
-    duration: 200,
-    easing: "easeInOutSine"
-  });
-
-$(".button").click(function() {
-  basicTimeline.play();
-});
-
-$(".text").click(function() {
-  basicTimeline.play();
-});
 </script>
-
-
 </body>
 </html>
-
-
-
-
-
-
-
-
-
