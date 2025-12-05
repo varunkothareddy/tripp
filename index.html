@@ -10,31 +10,61 @@
     <header>
         <h1>KUMAR TRAVELS</h1>
     </header>
-    <form id="sheetdb" action="https://sheetdb.io/api/v1/yrw2k6q2a2wpv" method="post">
+
+    <form id="sheetdb" action="https://sheetdb.io/api/v1/medobg56683gz" method="post">
         <div class="d1">
-        <input type="text" name="data[NAME]" id="uname" placeholder="Enter-Name"><br>
-        <input type="text" name="data[MOBILE]" id="unum" placeholder="Mobile-Number"><br>
-        <input type="email" name="data[E-MAIL]" id="umail" placeholder="Enter-Email"><br>
-        <input type="number" name="data[PERSONS]" id="unum" placeholder="Num of persons"><br>
-        <input type="date" name="data[DATE]" id="udate" placeholder="Enter-data"><br>
-        <input id="s1" type="submit" value="SUBMIT">
+            <input type="text" name="data[NAME]" id="uname" placeholder="Enter-Name" required><br>
+            <input type="text" name="data[MOBILE]" id="umobile" placeholder="Mobile-Number" required><br>
+            <input type="email" name="data[EMAIL]" id="umail" placeholder="Enter-Email" required><br>
+            <input type="number" name="data[PERSONS]" id="upersons" placeholder="Num of persons" required><br>
+            <input type="date" name="data[DATE]" id="udate" required><br>
+            <input id="s1" type="submit" value="SUBMIT">
         </div>
     </form>
-    <script>
-        var form = document.getElementById("sheetdb");
-        form.addEventListener("submit", e => {
-            e.preventDefault();
-            fetch(form.action, {
-                method : 'POST',
-                body: new FormData(document.getElementById("sheetdb"),)
-            }).then(
-                response => response.json()
-            ).then((html) => {
-                alert('Submitted !! Thank You '+ document.getElementById('uname').value)
-                window.location.href = '';
-                location.reload();
-            })
-        })
-    </script>
+
+<script>
+// const form = document.getElementById("sheetdb");
+
+// form.addEventListener("submit", async (e) => {
+//   e.preventDefault();
+
+//   try {
+//     const response = await fetch(form.action, {
+//       method: 'POST',
+//       body: new FormData(form)
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("Server returned " + response.status);
+//     }
+
+//     alert("Submitted Successfully! Thank you " + document.getElementById('uname').value);
+//     form.reset();
+//   } 
+//   catch (err) {
+//     alert("⚠ Error submitting data:\n" + err.message);
+//     console.log(err);
+//   }
+// });
+    const form = document.getElementById("sheetdb");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const response = await fetch(form.action, {
+    method: 'POST',
+    body: new FormData(form)
+  });
+
+  const result = await response.json();
+  
+  alert("Submitted Successfully! Thank you " + document.getElementById('uname').value);
+  form.reset();
+});
+
+</script>
+
 </body>
 </html>
+
+
