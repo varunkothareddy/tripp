@@ -15,8 +15,8 @@
     <div class="d1">
         <input type="text" name="data[NAME]" id="uname" placeholder="Enter-Name" required><br>
 
-        <input type="text" name="data[MOBILE]" id="umobile" maxlength="10"
-               pattern="[0-9]{10}" placeholder="Mobile-Number" required><br>
+        <!-- Mobile validation input -->
+        <input type="text" name="data[MOBILE]" id="umobile" maxlength="10" placeholder="Mobile-Number" required><br>
 
         <input type="email" name="data[EMAIL]" id="umail" placeholder="Enter-Email" required><br>
         <input type="number" name="data[PERSONS]" id="upersons" placeholder="Num of persons" required><br>
@@ -25,28 +25,36 @@
     </div>
 </form>
 
-<!-- Message area -->
-<p id="form-message"></p>
+<!-- Status message will appear here -->
+<p id="message"></p>
 
 <script>
 const form = document.getElementById("sheetdb");
-const messageEl = document.getElementById("form-message");
+const message = document.getElementById("message");
+const submitBtn = document.getElementById("s1");
 
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     let mobile = document.getElementById("umobile").value.trim();
+    let name = document.getElementById("uname").value.trim();
 
     // Clear previous message
-    messageEl.textContent = "";
-    messageEl.style.color = "";
+    message.textContent = "";
+    message.style.color = "";
 
-    // 10-digit mobile validation
-    if (!/^[0-9]{10}$/.test(mobile)) {
-        messageEl.textContent = "Please enter a valid 10-digit mobile number.";
-        messageEl.style.color = "red";
+    // Check if mobile is exactly 10 digits and numeric
+    if (mobile.length !== 10 || !/^[0-9]+$/.test(mobile)) {
+        alert("Please enter correct mobile number");
         return;
     }
+
+    // Show loading state
+    submitBtn.disabled = true;
+    const originalBtnText = submitBtn.value;
+    submitBtn.value = "Submitting...";
+    message.textContent = "Submitting your details, please wait...";
+    message.style.color = "blue";
 
     try {
         const response = await fetch(form.action, {
@@ -56,19 +64,28 @@ form.addEventListener("submit", async (e) => {
 
         const result = await response.json();
 
-        messageEl.textContent = "Submitted Successfully! Thank you " + document.getElementById('uname').value;
-        messageEl.style.color = "green";
+        // Show success message on page
+        message.textContent = `✔ Success! Thank you, ${name}. Your form has been submitted.`;
+        message.style.color = "green";
+
+        // Reset form
         form.reset();
     } catch (error) {
-        messageEl.textContent = "Something went wrong. Please try again.";
-        messageEl.style.color = "red";
         console.error(error);
+        message.textContent = "Something went wrong. Please try again.";
+        message.style.color = "red";
+    } finally {
+        // Remove loading state
+        submitBtn.disabled = false;
+        submitBtn.value = originalBtnText;
     }
 });
 </script>
 
+
 </body>
 </html>
+
 
 
 
